@@ -1,0 +1,14 @@
+# fly.toml app configuration file generated for spring-fly on 2023-05-30T16:15:14+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "spring-fly"
+primary_region = "arn"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0

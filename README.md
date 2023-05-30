@@ -1,9 +1,4 @@
-# devops-with-docker
-DevOps with Docker course exercises
+# DevOps with Docker course
 
-Part 1 (TKT21036)
-
-Part 2 (TKT21037)
-
-Part 3 (TKT21038)
+Answers to exercises are in separate directories for each part.
 
