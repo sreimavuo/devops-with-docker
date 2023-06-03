@@ -1,0 +1,16 @@
+services:
+
+  frontend:
+    build:
+      context: ../../Part1/ex1.12/
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8080:8080/tcp"
+
+  backend:
+    build:
+      context: ../../Part1/ex1.13/
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8081:8081/tcp"
+

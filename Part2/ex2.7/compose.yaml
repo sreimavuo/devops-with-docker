@@ -1,0 +1,43 @@
+services:
+
+  frontend:
+    container_name: frontend-server
+    build:
+      context: ../../Part1/ex1.12/
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8080:8080/tcp"
+
+  backend:
+    container_name: backend-server
+    build:
+      context: ../../Part1/ex1.13/
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8081:8081/tcp"
+    environment:
+      - REDIS_HOST=redis-server
+      - POSTGRES_HOST=db-server
+      - POSTGRES_PASSWORD=Kissa123
+
+  redis:
+    container_name: redis-server
+    image: redis:latest
+    command: ["redis-server"]
+    expose:
+      - "6379"
+
+  db:
+    container_name: db-server
+    image: postgres:latest
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=Kissa123
+    expose:
+      - "5432"
+    restart: unless-stopped
+
+volumes:
+  database:
+

@@ -1,0 +1,27 @@
+services:
+
+  frontend:
+    container_name: frontend-server
+    build:
+      context: ../../Part1/ex1.12/
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8080:8080/tcp"
+
+  backend:
+    container_name: backend-server
+    build:
+      context: ../../Part1/ex1.13/
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8081:8081/tcp"
+    environment:
+      - REDIS_HOST=redis-server
+
+  redis:
+    container_name: redis-server
+    image: redis:latest
+    command: ["redis-server"]
+    expose:
+      - "6379"
+
