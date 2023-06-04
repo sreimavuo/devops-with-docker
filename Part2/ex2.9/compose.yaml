@@ -1,42 +1,28 @@
 services:
 
-  frontend:
+  frontend-server:
     container_name: frontend-server
     build:
-      context: ../../Part1/ex1.12/
+      context: ./frontend/
       dockerfile: Dockerfile
-    expose:
-      - "8080"
-    networks:
-      - frontnet
 
-  backend:
+  backend-server:
     container_name: backend-server
     build:
-      context: ../../Part1/ex1.13/
+      context: ./backend/
       dockerfile: Dockerfile
-    expose:
-      - "8081"
-    environment:
-      - REQUEST_ORIGIN=*
-      - REDIS_HOST=redis-server
-      - POSTGRES_HOST=db-server
-      - POSTGRES_PASSWORD=Kissa123
-    networks:
-      - backnet
     depends_on:
-      - db
+      - db-server
+      - redis-server
 
-  redis:
+  redis-server:
     container_name: redis-server
     image: redis:latest
     command: ["redis-server"]
     expose:
       - "6379"
-    networks:
-      - backnet
 
-  db:
+  db-server:
     container_name: db-server
     image: postgres:latest
     volumes:
@@ -46,27 +32,18 @@ services:
     expose:
       - "5432"
     restart: unless-stopped
-    networks:
-      - backnet
 
-  proxy:
+  proxy-server:
     container_name: proxy-server
     image: nginx:latest
     volumes:
-      - /Users/zamir/Dropbox/Opiskelu/devops-with-docker/Part2/ex2.8/nginx.conf:/etc/nginx/nginx.conf
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "127.0.0.1:80:80/tcp"
-    networks:
-      - frontnet
-      - backnet
+    depends_on:
+      - frontend-server
+      - backend-server
 
 volumes:
   database:
-
-networks:
-  frontnet:
-    name: frontnet
-
-  backnet:
-    name: backnet
 
