@@ -14,9 +14,78 @@ The deployment is integrated in the ex3.1 GHA workflow (see link to repo above),
 
 ### Ex 3.3
 
+builder.sh:
 
+``` Shell
+#!/bin/sh
+
+#
+# Prep
+#
+
+# This is what we have
+echo " "
+echo GitHub repository to pull from: $1
+echo DockerHub repository to push to: $2
+echo " "
+
+GITHUB_REPO=$1
+DOCKER_REPO=$2
+
+# If credential env variables are not set, exit with error
+[[ ! -n "${DOCKER_PASS}" ]] && echo "DOCKER_PASS is not set, exiting.." && exit 1
+[[ ! -n "${DOCKER_USER}" ]] && echo "DOCKER_USER is not set, exiting.." && exit 1
+
+# If there are no command-line arguments, exit with error
+[[ ! -n "${GITHUB_REPO}" ]] && echo "GITHUB_REPO is not set, exiting.." && exit 1
+[[ ! -n "${DOCKER_REPO}" ]] && echo "DOCKER_REPO is not set, exiting.." && exit 1
+
+# If local copy of repo already exists, exit with error
+REPONAME="`echo $1 | cut -d"/" -f2`"
+[ -d $REPONAME ] && echo "local repo dir: $REPONAME already exists, abort mission" && exit 1
+
+#
+# Run
+#
+
+# Pull the repo from GitHub
+echo "RUN STAGE 1: PULL REPO FROM GITHUB"
+git clone git@github.com:$GITHUB_REPO.git
+
+# Build the image using Dockerfile
+echo "RUN STAGE 2: BUILD IMAGE"
+cd $REPONAME
+echo Current directory is: `pwd`
+docker build . -t $DOCKER_REPO
+
+# Authenticate to DockerHub
+echo "RUN STAGE 3: PUSH IMAGE TO DOCKERHUB"
+docker login --username $DOCKER_USER --password $DOCKER_PASS
+
+# Push the image to DockerHub
+docker push $DOCKER_REPO:latest
+
+echo "DONE"
+```
 
 ### Ex 3.4
+
+The shell script is the same as in ex3.3 above, but with one small adjustment, using `git clone https://github.com/...` instead of `git clone git@github.com:...` as it doesn't require setting up GitHub credentials inside the build container, and we just want to pull the public repo for building, not for pushing changes.
+
+Dockerfile:
+
+``` Dockerfile
+FROM docker:latest
+WORKDIR /usr/src/app
+COPY ./builder.sh .
+RUN apk add git
+
+ENTRYPOINT ["./builder.sh"]
+```
+
+Command:
+
+`docker run -e DOCKER_USER=sreimavuo -e DOCKER_PASS=password_here -v /var/run/docker.sock:/var/run/docker.sock builder sreimavuo/express-app sreimavuo/express-app`
 
 ## Using a Non-root User
 
