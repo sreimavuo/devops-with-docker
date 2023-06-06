@@ -4,11 +4,17 @@
 
 ### Ex 3.1
 
-
+Link to the repository: <https://github.com/sreimavuo/express-app>.
 
 ### Ex 3.2
 
+I kept using [Fly.io](https://fly.io/) as the cloud provider and found simple enough instructions on how to do it from [here](https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/) and[here](https://medium.com/geekculture/deploy-docker-images-on-fly-io-free-tier-afbfb1d390b1).
+
+The deployment is integrated in the ex3.1 GHA workflow (see link to repo above), and I realise there are several ways to arrange the pipeline. I opted for deploying to Fly.io from DockerHub, running the jobs in sequence instead of branching to two parallel tasks.
+
 ### Ex 3.3
+
+
 
 ### Ex 3.4
 

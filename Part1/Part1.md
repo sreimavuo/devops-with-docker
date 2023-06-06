@@ -97,7 +97,7 @@ The secret message is the same as in the ubuntu-version of the image.
 
 ``` Shell
 ➜  Part1 git:(master) ✗ docker run -it devopsdockeruh/pull_exercise
-````
+```
 
 Docker Hubista ei löytynyt oikeen mitään hyödyllistä imageen liittyen, mutta ohjeistuksesta käsitin että jos Docker Hubista ei löydy tietoa niin sitten sitä todennäköisesti löytyy organisaation Github-reposta (mikä selvisi aiemman tehtävän salaisesta viestistä).
 
